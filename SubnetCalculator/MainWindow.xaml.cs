@@ -40,6 +40,10 @@ namespace SubnetCalculator
                 outputMaskBin.Content = ToBinMask(int.Parse(input.Text));
                 outputMaskDec.Content = ToDecMask(int.Parse(input.Text));
             }
+            if (e.Key == Key.RightCtrl)
+            {
+                outputMaskBin.Content = ToBinAddress(input.Text);
+            }
         }
          public string ToBin(int inputDec)
             {
@@ -85,6 +89,37 @@ namespace SubnetCalculator
                 }
             }
             return maskInDec;
+        }
+        public string ToBinAddress(string address)
+        {
+            string[] octetValues = address.Split('.');
+            string[] addressInBin= new string[octetValues.Length];
+            string outputAddress = "";
+            for (int i = 0; i < octetValues.Length; i++)
+            {
+                if (i == octetValues.Length - 1)
+                {
+
+                    addressInBin[i] = Convert.ToString(ToBin(int.Parse(octetValues[i])));
+                    while (addressInBin[i].Length<=8)
+                    {
+                        addressInBin[i] = "0" + addressInBin[i];
+                    }
+                }
+                else
+                {
+                    addressInBin[i] = Convert.ToString(ToBin(int.Parse(octetValues[i]))) + '.';
+                    while (addressInBin[i].Length <= 8)
+                    {
+                        addressInBin[i] = "0" + addressInBin[i];
+                    }
+                }
+            }
+            foreach (var item in addressInBin)
+            {
+                outputAddress += item;
+            }
+            return outputAddress;
         }
     }
 }
